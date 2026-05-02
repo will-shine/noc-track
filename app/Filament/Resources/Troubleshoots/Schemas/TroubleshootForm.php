@@ -47,9 +47,16 @@ class TroubleshootForm
                             ->label('Tipe Masalah')
                             ->required()
                             ->options([
-                                'system' => 'System',
-                                'network' => 'Network',
-                                'hardware' => 'Hardware',
+                                // 'system' => 'System',
+                                // 'network' => 'Network',
+                                // 'hardware' => 'Hardware',
+
+                                'psb' => 'PSB',
+                                'dismantle' => 'Dismantle',
+                                'maintenance' => 'Maintenance',
+                                'service' => 'Service',
+                                'incident' => 'Incident',
+
                             ])
                             ->default('system'),
 

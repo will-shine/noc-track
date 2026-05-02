@@ -17,6 +17,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -109,6 +110,19 @@ class TroubleshootsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+
+                SelectFilter::make('type')
+                    ->multiple()
+                    ->options([
+
+                        'psb' => 'PSB',
+                        'dismantle' => 'Dismantle',
+                        'maintenance' => 'Maintenance',
+                        'service' => 'Service',
+                        'incident' => 'Incident',
+
+
+                    ]),
                 //
                 Filter::make('incident_time')
                     ->label('Order date')
