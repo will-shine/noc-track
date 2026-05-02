@@ -16,4 +16,9 @@ class ListTroubleshoots extends ListRecords
             CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return TroubleshootResource::getWidgets();
+    }
 }

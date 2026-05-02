@@ -25,6 +25,7 @@ class TroubleshootsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('incident_time', 'desc')
             ->columns([
                 TextColumn::make('ticket')
                     ->toggleable(isToggledHiddenByDefault: false)

@@ -7,6 +7,7 @@ use App\Filament\Resources\Troubleshoots\Pages\EditTroubleshoot;
 use App\Filament\Resources\Troubleshoots\Pages\ListTroubleshoots;
 use App\Filament\Resources\Troubleshoots\Schemas\TroubleshootForm;
 use App\Filament\Resources\Troubleshoots\Tables\TroubleshootsTable;
+use App\Filament\Resources\Troubleshoots\Widgets\TroubleStat;
 use App\Models\Troubleshoot;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -34,6 +35,13 @@ class TroubleshootResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TroubleStat::class,
         ];
     }
 
