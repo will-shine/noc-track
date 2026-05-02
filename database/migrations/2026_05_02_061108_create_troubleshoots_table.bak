@@ -1,0 +1,61 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('troubleshoots', function (Blueprint $table) {
+            $table->id();
+            $table->string('tiket')->unique(); // Wajib untuk pelacakan
+            $table->text('name'); // Tindakan yang sudah dilakukan oleh NOC
+
+            $table->string('klient'); // Wajib untuk pelacakan
+            $table->text('keluhan'); // Tindakan yang sudah dilakukan oleh NOC
+
+            // waktu 
+            $table->tanggal_kejadian('date')->nullable();
+            $table->waktu_kejadian('time')->nullable();
+
+            $table->tanggal_respon('date')->nullable();
+            $table->waktu_respon('time')->nullable();
+
+            $table->tanggal_penyelesaian('date')->nullable();
+            $table->waktu_penyelesaian('time')->nullable();
+
+            // Penanganan / Tindakan
+            $table->text('aksi'); // Tindakan yang sudah dilakukan oleh NOC
+            $table->text('penyebab')->nullable(); // Penyebab utama (nullable jika belum diketahui)
+
+
+            $table->text('yang_mengerjakan')->nullable();
+
+            // Status dan Prioritas
+            $table->string('prioritas', ['low', 'medium', 'hight'])->default('medium');
+            $table->enum('status', ['open', 'progress', 'closed'])->default('closed');
+
+
+
+            $table->string('tipe', ['system', 'hardware', 'hight'])->default('system');
+
+
+            $table->text('catatan')->nullable();
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('troubleshoots');
+    }
+};
