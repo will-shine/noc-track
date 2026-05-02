@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('troubleshoots', function (Blueprint $table) {
             $table->id();
             $table->string('ticket')->unique(); // Wajib untuk pelacakan
-            $table->text('name'); // Tindakan yang sudah dilakukan oleh NOC
+            $table->string('name'); // Tindakan yang sudah dilakukan oleh NOC
 
             $table->string('client'); // Wajib untuk pelacakan
             $table->text('complaint'); // Tindakan yang sudah dilakukan oleh NOC

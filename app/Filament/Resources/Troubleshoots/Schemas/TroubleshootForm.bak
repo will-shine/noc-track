@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Filament\Resources\Troubleshoots\Schemas;
+
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
+class TroubleshootForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                // TextInput::make('ticket')
+                //     ->required(),
+                TextInput::make('ticket')
+                    ->label('Nomor Tiket')
+                    ->placeholder('Otomatis tergenerate')
+                    ->disabled()
+                    ->dehydrated(false), // Tidak perlu disubmit karena dibuat di model
+                TextInput::make('name')
+                    ->required(),
+                TextInput::make('client')
+                    ->required(),
+                Textarea::make('complaint')
+                    ->required()
+                    ->columnSpanFull(),
+                DateTimePicker::make('incident_time'),
+                DateTimePicker::make('response_time'),
+                DateTimePicker::make('completion_time'),
+                Textarea::make('action')
+                    ->required()
+                    ->columnSpanFull(),
+                Textarea::make('root_cause')
+                    ->columnSpanFull(),
+                TextInput::make('handled_by'),
+
+                // Diubah menjadi Select (Dropdown) dengan 3 pilihan
+                Select::make('priority')
+                    ->required()
+                    ->options([
+                        'low' => 'Low',
+                        'medium' => 'Medium',
+                        'high' => 'High',
+                    ])
+                    ->default('medium'),
+
+                // Diubah menjadi Select (Dropdown) dengan 3 pilihan
+                Select::make('status')
+                    ->required()
+                    ->options([
+                        'open' => 'Open',
+                        'in_progress' => 'In Progress',
+                        'closed' => 'Closed',
+                    ])
+                    ->default('closed'),
+
+                // Diubah menjadi Select (Dropdown) dengan 3 pilihan
+                Select::make('type')
+                    ->required()
+                    ->options([
+                        'system' => 'System',
+                        'network' => 'Network',
+                        'hardware' => 'Hardware',
+                    ])
+                    ->default('system'),
+
+                Textarea::make('notes')
+                    ->columnSpanFull(),
+                Section::make('Troubleshoot')
+                    ->schema([
+                        FileUpload::make('images')
+                            ->label(false)
+                            ->multiple()
+                            ->image()
+                            ->imageEditor()
+                            ->directory('troubleshoot-images')
+                            // ->panelLayout('integrated') // Layout upload yang lebih rapi
+                            ->panelLayout('grid')
+                            ->disk('public')
+
+                            ->reorderable()
+                            ->appendFiles(),
+
+
+
+
+                    ]),
+            ]);
+    }
+}
