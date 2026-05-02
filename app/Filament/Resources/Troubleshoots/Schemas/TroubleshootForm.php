@@ -120,6 +120,9 @@ class TroubleshootForm
                             ->placeholder('Tuliskan catatan lain jika diperlukan...')
                             ->rows(12)
                             ->columnSpanFull(),
+
+                        TextInput::make('latitude'),
+                        TextInput::make('longitude'),
                     ])->columns(3),
 
                 // Section 4: Dokumentasi

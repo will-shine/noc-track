@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Troubleshoots\Tables;
 
 use Carbon\Carbon;
+use EduardoRibeiroDev\FilamentLeaflet\Infolists\MapEntry;
+use EduardoRibeiroDev\FilamentLeaflet\Support\Markers\Marker;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -186,6 +188,151 @@ class TroubleshootsTable
                 //     ->modalAlignment(Alignment::Center)
                 //     ->modalSubmitAction(false)
                 //     ->modalCancelActionLabel('Close'),
+
+
+                // Action::make('location')
+                //     ->color('gray')
+                //     ->icon(Heroicon::Eye)
+                //     ->modalHeading('location')
+                //     ->schema([
+                //         Section::make()
+                //             ->schema([
+                //                 MapEntry::make('location')
+                //                     ->height(284)
+                //                     ->zoom(10)
+                //                     ->pickMarker(fn(Marker $marker) => $marker->red())
+                //                     ->static()    // Disable interactions (enabled by default)
+                //                     ->columnSpanFull(),
+                //             ]),
+                //     ])
+                //     ->modalAlignment(Alignment::Center)
+                //     ->modalSubmitAction(false)
+                //     ->modalCancelActionLabel('Close'),
+
+                // Action::make('location')
+                //     ->color('gray')
+                //     ->icon(Heroicon::Eye)
+                //     ->modalHeading('Location')
+                //     ->mountUsing(function ($form, $record) {
+                //         // Mengisi form berdasarkan data record sebelum modal dibuka
+                //         // Pastikan $record memiliki atribut lat dan lng atau sesuai dengan milik Anda
+                //         $form->fill([
+                //             'location' => [
+                //                 'lat' => $record->latitude ?? null, // Ganti dengan kolom latitude Anda
+                //                 'lng' => $record->longitude ?? null, // Ganti dengan kolom longitude Anda
+                //             ]
+                //         ]);
+                //     })
+                //     ->schema([
+                //         Section::make()
+                //             ->schema([
+                //                 MapEntry::make('location')
+                //                     ->height(284)
+                //                     ->zoom(14) // Atur zoom agar sesuai, misalnya 14 atau 15
+                //                     ->center($record->latitude ?? 0, $record->longitude ?? 0) // Memastikan pusat peta sesuai
+                //                     ->latitudeFieldName('lat') // Sesuaikan dengan key di mountUsing
+                //                     ->longitudeFieldName('lng') // Sesuaikan dengan key di mountUsing
+                //                     ->pickMarker(fn(Marker $marker) => $marker->red())
+                //                     ->static()
+                //                     ->columnSpanFull(),
+                //             ]),
+                //     ])
+                //     ->modalAlignment(Alignment::Center)
+                //     ->modalSubmitAction(false)
+                //     ->modalCancelActionLabel('Close'),
+
+
+                // Action::make('location')
+                //     ->color('gray')
+                //     ->icon(Heroicon::Eye)
+                //     ->modalHeading('Location')
+                //     ->schema([
+                //         Section::make()
+                //             ->schema([
+                //                 MapEntry::make('location')
+                //                     ->height(284)
+                //                     ->zoom(14)
+                //                     ->center(
+                //                         fn($record) => (float) $record?->latitude ?: 0,
+                //                         fn($record) => (float) $record?->longitude ?: 0
+                //                     )
+                //                     ->markers(function ($record) {
+                //                         return [
+                //                             // Isi latitude dan longitude di dalam parameter make()
+                //                             Marker::make(
+                //                                 (float) $record?->latitude ?? 0,
+                //                                 (float) $record?->longitude ?? 0
+                //                             )->color('red'),
+                //                         ];
+                //                     })
+                //                     ->static()
+                //                     ->columnSpanFull(),
+                //             ]),
+                //     ])
+                //     ->modalAlignment(Alignment::Center)
+                //     ->modalSubmitAction(false)
+                //     ->modalCancelActionLabel('Close'),
+
+
+                // Action::make('location')
+                //     ->color('gray')
+                //     ->icon(Heroicon::Eye)
+                //     ->modalHeading('Location')
+                //     ->mountUsing(function ($form, $record) {
+                //         // Mengisi form/data awal secara aman sebelum schema/infolist dirender
+                //         $form->fill([
+                //             'latitude'  => $record->latitude ?? 0,
+                //             'longitude' => $record->longitude ?? 0,
+                //         ]);
+                //     })
+                //     ->schema([
+                //         Section::make()
+                //             ->schema([
+                //                 MapEntry::make('location')
+                //                     ->height(284)
+                //                     ->zoom(14)
+                //                     // Ambil dari variabel atau biarkan default (leaflet akan membaca dari lat dan lng secara otomatis)
+                //                     ->static()
+                //                     ->columnSpanFull(),
+                //             ]),
+                //     ])
+                //     ->modalAlignment(Alignment::Center)
+                //     ->modalSubmitAction(false)
+                //     ->modalCancelActionLabel('Close'),
+
+
+
+                Action::make('location')
+                    ->color('gray')
+                    ->icon(Heroicon::Eye)
+                    ->modalHeading('Location')
+                    // ->mountUsing(function ($form, $record) {
+                    //     // Mengisi form/data awal secara aman sebelum schema/infolist dirender
+                    //     $form->fill([
+                    //         'latitude'  => $record->latitude ?? 0,
+                    //         'longitude' => $record->longitude ?? 0,
+                    //     ]);
+                    // })
+                    ->schema([
+                        Section::make()
+                            ->schema([
+                                MapEntry::make('location')
+                                    // ->mapDraggable(true)
+                                    ->height(484)
+                                    ->zoom(15)
+                                    ->pickMarker(fn(Marker $marker) => $marker->red())
+                                    // ->static()    // Disable interactions (enabled by default)
+                                    ->columnSpanFull()
+
+
+                            ]),
+                    ])
+                    ->modalAlignment(Alignment::Center)
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
+
+
+
 
 
 

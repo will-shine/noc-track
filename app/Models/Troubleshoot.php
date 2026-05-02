@@ -23,6 +23,9 @@ class Troubleshoot extends Model
         'type',
         'notes',
         'images',
+        'latitude',
+        'longitude',
+
     ];
 
     protected $casts = [
