@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: noc-track-app
     restart: unless-stopped
-    env_file: .env
+    # env_file: .env
     volumes:
       - ./:/var/www/html
     networks:
@@ -33,10 +33,10 @@ services:
     container_name: noc-track-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: noc12345678
+      MYSQL_ROOT_PASSWORD: noc12345678
+      MYSQL_PASSWORD: noc12345678
+      MYSQL_USER: noc12345678
     volumes:
       - dbdata:/var/lib/mysql
     networks:
