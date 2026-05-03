@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: filament-app
+    container_name: noc-track-app
     restart: unless-stopped
     env_file: .env
     volumes:
@@ -17,7 +17,7 @@ services:
   # Service Web Server (Nginx) untuk melayani file PHP
   webserver:
     image: nginx:alpine
-    container_name: filament-webserver
+    container_name: noc-track-webserver
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -30,7 +30,7 @@ services:
   # Service Database
   db:
     image: mysql:8.0
-    container_name: filament-db
+    container_name: noc-track-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
