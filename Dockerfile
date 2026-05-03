@@ -28,6 +28,9 @@ WORKDIR /var/www/html
 # Copy project ke container
 COPY . .
 
+# Buat file .env sementara dari example agar composer tidak error
+RUN cp .env.example .env
+
 # Install dependencies Laravel (tanpa dev untuk produksi)
 RUN composer install --no-dev --optimize-autoloader
 
