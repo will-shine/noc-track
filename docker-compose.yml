@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: noc-track-app
     restart: unless-stopped
-    # env_file: .env
+    env_file: .env
     volumes:
       - ./:/var/www/html
     networks:
