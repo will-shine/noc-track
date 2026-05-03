@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Troubleshoots\Tables;
 
 use Carbon\Carbon;
+use EduardoRibeiroDev\FilamentLeaflet\Enums\TileLayer;
 use EduardoRibeiroDev\FilamentLeaflet\Infolists\MapEntry;
 use EduardoRibeiroDev\FilamentLeaflet\Support\Markers\Marker;
 use Filament\Actions\Action;
@@ -319,7 +320,7 @@ class TroubleshootsTable
 
                 Action::make('location')
                     ->color('gray')
-                    ->icon(Heroicon::Eye)
+                    ->icon(Heroicon::MapPin)
                     ->modalHeading('Location')
                     // ->mountUsing(function ($form, $record) {
                     //     // Mengisi form/data awal secara aman sebelum schema/infolist dirender
@@ -338,6 +339,8 @@ class TroubleshootsTable
                                     ->pickMarker(fn(Marker $marker) => $marker->red())
                                     // ->static()    // Disable interactions (enabled by default)
                                     ->columnSpanFull()
+                                    ->tileLayersUrl(TileLayer::GoogleHybrid)
+
 
 
                             ]),

@@ -4,11 +4,12 @@ namespace App\Filament\Resources\Troubleshoots\Widgets;
 
 use App\Filament\Resources\Troubleshoots\Pages\ListTroubleshoots;
 use App\Models\Troubleshoot;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Flowframe\Trend\Trend;
+use Flowframe\Trend\TrendValue;
+use Illuminate\Support\Str;
 
 class TroubleStat extends StatsOverviewWidget
 {
@@ -25,84 +26,43 @@ class TroubleStat extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $trendMonth = Trend::model(Troubleshoot::class)
-            ->between(
-                start: now()->subMonth(),
-                end: now(),
-            )
-            ->dateColumn('incident_time')
-            ->perDay()
-            ->count();
+        // 1. Ambil query tabel saat ini (sudah mempertimbangkan filter, tanggal, dll.)
+        $query = $this->getPageTableQuery();
 
-        // $trendYear = Trend::model(Troubleshoot::class)
-        //     ->between(
-        //         start: now()->subYear(),
-        //         end: now(),
-        //     )
-        //     ->dateColumn('incident_time')
-        //     ->perMonth()
-        //     ->count();
+        // 2. Hitung jumlah total data
+        $total = (clone $query)->count();
 
-        // $trendWeek = Trend::model(Troubleshoot::class)
-        //     ->between(
-        //         start: now()->subYear(),
-        //         end: now(),
-        //     )
-        //     ->dateColumn('incident_time')
-        //     ->perWeek()
-        //     ->count();
-
-
-        // // 1. Hitung Total Revenue
-        // $totalRevenue = $this->getPageTableQuery()
-        //     ->whereHas('category', fn($query) => $query->where('type', 'revenue'))
-        //     ->sum('amount');
-
-        // // 2. Hitung Total Expense
-        // $totalExpense = $this->getPageTableQuery()
-        //     ->whereHas('category', fn($query) => $query->where('type', 'expense'))
-        //     ->sum('amount');
-
-        // // 3. Hitung Selisih (Net Profit/Loss)
-        // $netCashFlow = $totalRevenue - $totalExpense;
-
-        return [
-
-
-            Stat::make('CashFlows Count', number_format($this->getPageTableQuery()->count(), 0))
-                ->chart(
-                    $trendMonth
-                        ->map(fn(TrendValue $value) => $value->aggregate)
-                        ->toArray()
-                )
-                ->color('gray')
-                ->description('-'),
-
-
-            // Stat::make('Average Amount', 'Rp' . number_format((float) $this->getPageTableQuery()->avg('amount'), 0, ',', '.'))
-            //     ->chart(
-            //         $trendYear
-            //             ->map(fn(TrendValue $value) => $value->aggregate)
-            //             ->toArray()
-            //     )
-            //     ->color('success')
-            //     ->description('-'),
-
-            // Stat::make('Total CashFlow', 'Rp' . number_format((float) $this->getPageTableQuery()->sum('amount'), 0, ',', '.'))
-            //     ->chart(
-            //         $trendWeek
-            //             ->map(fn(TrendValue $value) => $value->aggregate)
-            //             ->toArray()
-            //     )
-            //     ->color('info')
-            //     ->description('-'),
-
-            // // Card baru untuk Net Profit / Selisih
-            // Stat::make('CashFlows', 'Rp' . number_format($netCashFlow, 0, ',', '.'))
-            //     ->description($netCashFlow >= 0 ? 'Surplus' : 'Defisit')
-            //     ->descriptionIcon($netCashFlow >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
-            //     ->color($netCashFlow >= 0 ? 'success' : 'danger'),
-
+        // 3. Kelompokkan berdasarkan tipe untuk membuat statistik dinamis
+        $stats = [
+            Stat::make('Total Troubleshoot', number_format($total, 0))
+                ->color('primary')
+            // ->description('Total keseluruhan data'),
         ];
+
+        // Lakukan query untuk menghitung total masing-masing tipe berdasarkan data yang terfilter
+        $types = ['psb', 'dismantle', 'maintenance', 'service', 'incident'];
+
+        foreach ($types as $type) {
+            $count = (clone $query)->where('type', $type)->count();
+
+            // Tambahkan Stat untuk setiap tipe
+            $stats[] = Stat::make(Str::headline($type), number_format($count, 0))
+                ->color($this->getColorForType($type));
+            // ->description('Total ' . Str::headline($type));
+        }
+
+        return $stats;
+    }
+
+    // Fungsi pembantu untuk menentukan warna card berdasarkan tipe
+    protected function getColorForType(string $type): string
+    {
+        return match ($type) {
+            'psb' => 'success',
+            'dismantle' => 'danger',
+            'maintenance' => 'warning',
+            'service' => 'info',
+            default => 'gray',
+        };
     }
 }
