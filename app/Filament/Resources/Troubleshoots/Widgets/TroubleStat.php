@@ -9,6 +9,7 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Support\HtmlString; // <--- PASTIKAN BARIS INI ADA
 use Illuminate\Support\Str;
 
 class TroubleStat extends StatsOverviewWidget
@@ -17,52 +18,54 @@ class TroubleStat extends StatsOverviewWidget
 
     protected ?string $pollingInterval = null;
 
+    // Tambahkan baris ini untuk mengatur jumlah kolom
+    // Kita set 6 agar semua stat (1 total + 5 tipe) berada dalam satu baris
+    // protected int | array | null $columns = 6;
+
+    // Ganti angka 6 dengan array responsif
+    protected int | array | null $columns = [
+        'default' => 2, // Di HP tampil 2 kolom (jadi 3 baris)
+        'sm' => 3,      // Di Tablet kecil tampil 3 kolom (jadi 2 baris)
+        'lg' => 6,      // Di Monitor besar tampil 6 kolom (jadi 1 baris)
+    ];
 
     protected function getTablePage(): string
     {
         return ListTroubleshoots::class;
     }
 
-
     protected function getStats(): array
     {
-        // 1. Ambil query tabel saat ini (sudah mempertimbangkan filter, tanggal, dll.)
         $query = $this->getPageTableQuery();
 
-        // 2. Hitung jumlah total data
-        $total = (clone $query)->count();
-
-        // 3. Kelompokkan berdasarkan tipe untuk membuat statistik dinamis
-        $stats = [
-            Stat::make('Total Troubleshoot', number_format($total, 0))
-                ->color('primary')
-            // ->description('Total keseluruhan data'),
+        // Mapping warna manual
+        $colors = [
+            'psb' => '#11863c',       // Success (Hijau)
+            'dismantle' => '#ef4444', // Danger (Merah)
+            'maintenance' => '#f59e0b', // Warning (Kuning)
+            'service' => '#1757bd',    // Info (Biru)
+            'accident' => '#fc0b1f',   // Purple
         ];
 
-        // Lakukan query untuk menghitung total masing-masing tipe berdasarkan data yang terfilter
+        $stats = [];
+
+        // Contoh untuk Total (Primary)
+        $total = (clone $query)->count();
+        $stats[] = Stat::make('Total Troubleshoot', new HtmlString('
+        <span style="color: #0003b6; font-weight: bold; font-size: 1.5rem;">' . number_format($total, 0) . '</span>
+    '));
+
         $types = ['psb', 'dismantle', 'maintenance', 'service', 'accident'];
 
         foreach ($types as $type) {
             $count = (clone $query)->where('type', $type)->count();
+            $hex = $colors[$type] ?? '#6b7280';
 
-            // Tambahkan Stat untuk setiap tipe
-            $stats[] = Stat::make(Str::headline($type), number_format($count, 0))
-                ->color($this->getColorForType($type));
-            // ->description('Total ' . Str::headline($type));
+            $stats[] = Stat::make(Str::headline($type), new HtmlString('
+            <span style="color: ' . $hex . '; font-weight: bold; font-size: 1.5rem;">' . number_format($count, 0) . '</span>
+        '));
         }
 
         return $stats;
-    }
-
-    // Fungsi pembantu untuk menentukan warna card berdasarkan tipe
-    protected function getColorForType(string $type): string
-    {
-        return match ($type) {
-            'psb' => 'success',
-            'dismantle' => 'danger',
-            'maintenance' => 'warning',
-            'service' => 'info',
-            default => 'gray',
-        };
     }
 }
