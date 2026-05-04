@@ -55,7 +55,7 @@ class TroubleshootForm
                                 'dismantle' => 'Dismantle',
                                 'maintenance' => 'Maintenance',
                                 'service' => 'Service',
-                                'incident' => 'Incident',
+                                'accident' => 'Accident',
 
                             ])
                             ->default('system'),

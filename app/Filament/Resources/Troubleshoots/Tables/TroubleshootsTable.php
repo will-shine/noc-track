@@ -120,7 +120,7 @@ class TroubleshootsTable
                         'dismantle' => 'Dismantle',
                         'maintenance' => 'Maintenance',
                         'service' => 'Service',
-                        'incident' => 'Incident',
+                        'accident' => 'Accident',
 
 
                     ]),

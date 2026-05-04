@@ -40,7 +40,7 @@ class TroubleStat extends StatsOverviewWidget
         ];
 
         // Lakukan query untuk menghitung total masing-masing tipe berdasarkan data yang terfilter
-        $types = ['psb', 'dismantle', 'maintenance', 'service', 'incident'];
+        $types = ['psb', 'dismantle', 'maintenance', 'service', 'accident'];
 
         foreach ($types as $type) {
             $count = (clone $query)->where('type', $type)->count();
